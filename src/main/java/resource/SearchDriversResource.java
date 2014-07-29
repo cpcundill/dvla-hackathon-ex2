@@ -31,7 +31,7 @@ public class SearchDriversResource {
         MongoCollection drivers = jongo.getCollection(driversCollection);
         Find searchQuery;
         if (dln.isPresent())
-            searchQuery = drivers.find("{currentDriverNumber: #}", dln);
+            searchQuery = drivers.find("{currentDriverNumber: #}", dln.get());
         else
             searchQuery = drivers.find().limit(10);
 
