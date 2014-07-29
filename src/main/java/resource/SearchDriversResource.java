@@ -35,20 +35,20 @@ public class SearchDriversResource {
         Find searchQuery;
         if (dln.isPresent())
             searchQuery = drivers.find("{currentDriverNumber: #}", dln.get());
-//        else if (ageRange.isPresent())
-//            searchQuery = createAgeRangeQuery(drivers, ageRange);
+        else if (ageRange.isPresent())
+            searchQuery = createAgeRangeQuery(drivers, ageRange);
         else
-            searchQuery = drivers.find().limit(10);
+            searchQuery = drivers.find().limit(100);
 
         return new DriverSearchResult(
                 Lists.newArrayList(searchQuery.as(Driver.class).iterator())
         );
     }
 
-//    private Find createAgeRangeQuery(MongoCollection drivers, Optional<String> ageRange) {
-//        String[] ages = ageRange.get().split("-");
-//        DateTime minAge = DateTime.now().minusYears(Integer.parseInt(ages[0]));
-//        DateTime maxAge = DateTime.now().minusYears(Integer.parseInt(ages[1]));
-//        return drivers.find("{birthDetails.date: {$lt: #, $gt: #}}", minAge.getMillis(), maxAge.getMillis());
-//    }
+    private Find createAgeRangeQuery(MongoCollection drivers, Optional<String> ageRange) {
+        String[] ages = ageRange.get().split("-");
+        DateTime minAge = DateTime.now().minusYears(Integer.parseInt(ages[0]));
+        DateTime maxAge = DateTime.now().minusYears(Integer.parseInt(ages[1]));
+        return drivers.find("{birthDetails.date: {$gte: #, $lte: #}}", maxAge.toDate(), minAge.toDate());
+    }
 }
