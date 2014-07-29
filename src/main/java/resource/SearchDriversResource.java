@@ -3,7 +3,10 @@ package resource;
 import com.codahale.metrics.annotation.Timed;
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
+import msg.Driver;
 import msg.DriverSearchResult;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeFieldType;
 import org.jongo.Find;
 import org.jongo.Jongo;
 import org.jongo.MongoCollection;
@@ -27,16 +30,25 @@ public class SearchDriversResource {
     }
 
     @GET @Timed
-    public List<DriverSearchResult> search(@QueryParam("dln") Optional<String> dln) {
+    public DriverSearchResult search(@QueryParam("dln") Optional<String> dln, @QueryParam("ageRange") Optional<String> ageRange) {
         MongoCollection drivers = jongo.getCollection(driversCollection);
         Find searchQuery;
         if (dln.isPresent())
             searchQuery = drivers.find("{currentDriverNumber: #}", dln.get());
+//        else if (ageRange.isPresent())
+//            searchQuery = createAgeRangeQuery(drivers, ageRange);
         else
             searchQuery = drivers.find().limit(10);
 
-        return Lists.newArrayList(
-                searchQuery.as(DriverSearchResult.class).iterator()
+        return new DriverSearchResult(
+                Lists.newArrayList(searchQuery.as(Driver.class).iterator())
         );
     }
+
+//    private Find createAgeRangeQuery(MongoCollection drivers, Optional<String> ageRange) {
+//        String[] ages = ageRange.get().split("-");
+//        DateTime minAge = DateTime.now().minusYears(Integer.parseInt(ages[0]));
+//        DateTime maxAge = DateTime.now().minusYears(Integer.parseInt(ages[1]));
+//        return drivers.find("{birthDetails.date: {$lt: #, $gt: #}}", minAge.getMillis(), maxAge.getMillis());
+//    }
 }

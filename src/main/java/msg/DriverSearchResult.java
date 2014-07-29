@@ -1,23 +1,22 @@
 package msg;
 
+import java.util.List;
+
 public class DriverSearchResult {
 
-    private String currentDriverNumber;
-    private Address address;
+    private List<Driver> results;
 
-    public String getCurrentDriverNumber() {
-        return currentDriverNumber;
+    public DriverSearchResult() {}
+
+    public DriverSearchResult(List<Driver> results) {
+        this.results = results;
     }
 
-    public void setCurrentDriverNumber(String currentDriverNumber) {
-        this.currentDriverNumber = currentDriverNumber;
+    public List<Driver> getResults() {
+        return results;
     }
 
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
+    public void setResults(List<Driver> results) {
+        this.results = results;
     }
 }
