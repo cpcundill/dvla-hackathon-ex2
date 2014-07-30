@@ -33,16 +33,8 @@ public class SearchDriversResource {
     public DriverSearchResult search(@QueryParam("dln") Optional<String> dln, @QueryParam("ageRange") Optional<String> ageRange) {
         MongoCollection drivers = jongo.getCollection(driversCollection);
         Find searchQuery;
-        if (dln.isPresent())
-            searchQuery = drivers.find("{currentDriverNumber: #}", dln.get());
-        else if (ageRange.isPresent())
-            searchQuery = createAgeRangeQuery(drivers, ageRange);
-        else
-            searchQuery = drivers.find().limit(100);
-
-        return new DriverSearchResult(
-                Lists.newArrayList(searchQuery.as(Driver.class).iterator())
-        );
+        // TODO: Search logic
+        return new DriverSearchResult(Lists.<Driver>newArrayList());
     }
 
     private Find createAgeRangeQuery(MongoCollection drivers, Optional<String> ageRange) {
