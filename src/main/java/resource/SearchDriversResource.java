@@ -47,8 +47,8 @@ public class SearchDriversResource {
 
     private Find createAgeRangeQuery(MongoCollection drivers, Optional<String> ageRange) {
         String[] ages = ageRange.get().split("-");
-        DateTime minAge = DateTime.now().minusYears(Integer.parseInt(ages[0]));
-        DateTime maxAge = DateTime.now().minusYears(Integer.parseInt(ages[1]));
-        return drivers.find("{birthDetails.date: {$gte: #, $lte: #}}", maxAge.toDate(), minAge.toDate());
+        DateTime upperBoundary = DateTime.now().minusYears(Integer.parseInt(ages[0]));
+        DateTime lowerBoundary = DateTime.now().minusYears(Integer.parseInt(ages[1]));
+        return drivers.find("{birthDetails.date: {$gte: #, $lte: #}}", lowerBoundary.toDate(), upperBoundary.toDate());
     }
 }

@@ -11,6 +11,8 @@ import io.dropwizard.setup.Environment;
 import org.jongo.Jongo;
 import resource.SearchDriversResource;
 
+import java.text.DateFormat;
+
 public class App extends Application<DriverSearchConfig> {
 
     @Override
